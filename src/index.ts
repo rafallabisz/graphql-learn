@@ -3,6 +3,7 @@ import { ApolloServer } from "apollo-server-express";
 import * as express from "express";
 import { buildSchema, Resolver, Query } from "type-graphql";
 import { createConnection } from "typeorm";
+import config from "./ormconfig";
 
 @Resolver()
 class HelloResolver {
@@ -13,7 +14,13 @@ class HelloResolver {
 }
 
 const bootstrap = async () => {
-  await createConnection();
+  try {
+    await createConnection(config);
+  } catch (err) {
+    console.log("Error while connecting to the db", err);
+    return err;
+  }
+
   const schema = await buildSchema({
     resolvers: [HelloResolver],
   });
