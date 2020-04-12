@@ -1,3 +1,4 @@
+import "dotenv/config";
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import * as express from "express";
@@ -15,9 +16,10 @@ class HelloResolver {
 
 const bootstrap = async () => {
   try {
-    await createConnection(config);
+    const connection = await createConnection(config);
+    console.log(`Is connected: ${connection.isConnected}`);
   } catch (err) {
-    console.log("Error while connecting to the db", err);
+    console.log("Error while connecting to the database", err);
     return err;
   }
 

@@ -1,6 +1,6 @@
 import { ConnectionOptions } from "typeorm";
 
-const config: ConnectionOptions = {
+const developmentConfig: ConnectionOptions = {
   name: "default",
   type: "postgres",
   host: process.env.POSTGRES_HOST,
@@ -12,5 +12,14 @@ const config: ConnectionOptions = {
   entities: ["src/entity/*.*"],
   synchronize: true,
 };
+
+const productionConfig: ConnectionOptions = {
+  type: "postgres",
+  // url: process.env.POSTGRES_DB_URL,
+  // entities: [],
+  synchronize: false,
+};
+
+const config = process.env.NODE_ENV === "production" ? productionConfig : developmentConfig;
 
 export default config;
