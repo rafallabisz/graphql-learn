@@ -2,17 +2,10 @@ import "dotenv/config";
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import * as express from "express";
-import { buildSchema, Resolver, Query } from "type-graphql";
+import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import config from "./ormconfig";
-
-@Resolver()
-class HelloResolver {
-  @Query(() => String)
-  async hello() {
-    return "Hello world!!";
-  }
-}
+import { RegisterResolver } from "./modules/user/Register";
 
 const bootstrap = async () => {
   try {
@@ -24,7 +17,7 @@ const bootstrap = async () => {
   }
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver],
+    resolvers: [RegisterResolver],
   });
   const apolloServer = new ApolloServer({ schema });
 
