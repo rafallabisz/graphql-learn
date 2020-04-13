@@ -1,11 +1,14 @@
 import "dotenv/config";
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
-import * as express from "express";
+import express from "express";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
-import config from "./ormconfig";
+import config from "./config/ormconfig";
 import { RegisterResolver } from "./modules/user/Register";
+
+const port = Number(process.env.PORT) || 4000;
+const API_URI = `http://localhost:${port}/graphql`;
 
 const bootstrap = async () => {
   try {
@@ -23,8 +26,8 @@ const bootstrap = async () => {
 
   const app = express();
   apolloServer.applyMiddleware({ app });
-  app.listen(4000, () => {
-    console.log("Server started on http://localhost:4000/graphql");
+  app.listen(port, () => {
+    console.log(`Server started on ${API_URI}`);
   });
 };
 
