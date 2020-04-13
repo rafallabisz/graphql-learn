@@ -1,11 +1,11 @@
-import "dotenv/config";
-import "reflect-metadata";
-import { ApolloServer } from "apollo-server-express";
-import express from "express";
-import { buildSchema } from "type-graphql";
-import { createConnection } from "typeorm";
-import config from "./config/ormconfig";
-import { RegisterResolver } from "./modules/user/Register";
+import 'dotenv/config';
+import 'reflect-metadata';
+import { ApolloServer } from 'apollo-server-express';
+import express from 'express';
+import { buildSchema } from 'type-graphql';
+import { createConnection } from 'typeorm';
+import config from './config/ormconfig';
+import { RegisterResolver } from './modules/user/Register';
 
 const port = Number(process.env.PORT) || 4000;
 const API_URI = `http://localhost:${port}/graphql`;
@@ -15,7 +15,7 @@ const bootstrap = async () => {
     const connection = await createConnection(config);
     console.log(`Is connected: ${connection.isConnected}`);
   } catch (err) {
-    console.log("Error while connecting to the database", err);
+    console.log('Error while connecting to the database', err);
     return err;
   }
 
