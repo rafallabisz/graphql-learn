@@ -12,6 +12,7 @@ import connectRedis from 'connect-redis';
 import { redis } from './redis';
 import cors from 'cors';
 import { LoginResolver } from './modules/user/Login';
+import { MeResolver } from './modules/user/Me';
 
 const bootstrap = async () => {
   try {
@@ -23,7 +24,7 @@ const bootstrap = async () => {
   }
 
   const schema = await buildSchema({
-    resolvers: [RegisterResolver, LoginResolver],
+    resolvers: [RegisterResolver, LoginResolver, MeResolver],
   });
   const apolloServer = new ApolloServer({
     schema,
