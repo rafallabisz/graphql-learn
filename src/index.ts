@@ -6,13 +6,13 @@ import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 import config from './config/ormconfig';
 import { RegisterResolver } from './modules/user/Register';
-import config_api from './config';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { redis } from './redis';
 import cors from 'cors';
 import { LoginResolver } from './modules/user/Login';
 import { MeResolver } from './modules/user/Me';
+import config_api from './config';
 
 const bootstrap = async () => {
   try {
@@ -26,12 +26,10 @@ const bootstrap = async () => {
   const schema = await buildSchema({
     resolvers: [RegisterResolver, LoginResolver, MeResolver],
   });
-  const apolloServer = new ApolloServer({
-    schema,
-    context: ({ req }) => ({ req }),
-  });
+  const apolloServer = new ApolloServer({ schema, context: ({ req }) => ({ req }) });
 
   const app = express();
+
   const RedisStore = connectRedis(session);
 
   //middlewares
@@ -53,7 +51,7 @@ const bootstrap = async () => {
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60, // 1 hours
+        maxAge: 1000 * 60 * 60 * 24 * 7 * 365,
       },
     }),
   );
