@@ -6,9 +6,13 @@ import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 import config from './config/ormconfig';
 import { RegisterResolver } from './modules/user/Register';
-
-const port = Number(process.env.PORT) || 4000;
-const API_URI = `http://localhost:${port}/graphql`;
+import session from 'express-session';
+import connectRedis from 'connect-redis';
+import { redis } from './redis';
+import cors from 'cors';
+import { LoginResolver } from './modules/user/Login';
+import { MeResolver } from './modules/user/Me';
+import config_api from './config';
 
 const bootstrap = async () => {
   try {
@@ -20,14 +24,41 @@ const bootstrap = async () => {
   }
 
   const schema = await buildSchema({
-    resolvers: [RegisterResolver],
+    resolvers: [RegisterResolver, LoginResolver, MeResolver],
   });
-  const apolloServer = new ApolloServer({ schema });
+  const apolloServer = new ApolloServer({ schema, context: ({ req }) => ({ req }) });
 
   const app = express();
+
+  const RedisStore = connectRedis(session);
+
+  //middlewares
+  app.use(
+    cors({
+      credentials: true,
+      origin: 'http://localhost:3000',
+    }),
+  );
+  app.use(
+    session({
+      store: new RedisStore({
+        client: redis,
+      }),
+      name: 'qid',
+      secret: process.env.SESSION_SECRET!,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24 * 7 * 365,
+      },
+    }),
+  );
+
   apolloServer.applyMiddleware({ app });
-  app.listen(port, () => {
-    console.log(`Server started on ${API_URI}`);
+  app.listen(config_api.port, () => {
+    console.log(`Server started on ${config_api.API_URI}`);
   });
 };
 
