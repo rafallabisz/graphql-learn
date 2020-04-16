@@ -13,6 +13,7 @@ import cors from 'cors';
 import { LoginResolver } from './modules/user/Login';
 import { MeResolver } from './modules/user/Me';
 import config_api from './config';
+import { customAuthChecker } from './utils/customAuthChecker';
 
 const bootstrap = async () => {
   try {
@@ -25,7 +26,9 @@ const bootstrap = async () => {
 
   const schema = await buildSchema({
     resolvers: [RegisterResolver, LoginResolver, MeResolver],
+    authChecker: customAuthChecker,
   });
+
   const apolloServer = new ApolloServer({ schema, context: ({ req }) => ({ req }) });
 
   const app = express();
