@@ -5,16 +5,12 @@ import express from 'express';
 import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 import config from './config/ormconfig';
-import { RegisterResolver } from './modules/user/Register';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { redis } from './redis';
 import cors from 'cors';
-import { LoginResolver } from './modules/user/Login';
-import { MeResolver } from './modules/user/Me';
 import config_api from './config';
 import { customAuthChecker } from './modules/utils/customAuthChecker';
-import { ConfirmUserResolver } from './modules/user/ConfirmUser';
 
 const bootstrap = async () => {
   try {
@@ -26,7 +22,7 @@ const bootstrap = async () => {
   }
 
   const schema = await buildSchema({
-    resolvers: [RegisterResolver, LoginResolver, MeResolver, ConfirmUserResolver],
+    resolvers: [`${__dirname}/modules/**/*.ts`],
     authChecker: customAuthChecker,
   });
 
