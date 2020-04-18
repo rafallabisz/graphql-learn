@@ -13,7 +13,8 @@ import cors from 'cors';
 import { LoginResolver } from './modules/user/Login';
 import { MeResolver } from './modules/user/Me';
 import config_api from './config';
-import { customAuthChecker } from './utils/customAuthChecker';
+import { customAuthChecker } from './modules/utils/customAuthChecker';
+import { ConfirmUserResolver } from './modules/user/ConfirmUser';
 
 const bootstrap = async () => {
   try {
@@ -25,7 +26,7 @@ const bootstrap = async () => {
   }
 
   const schema = await buildSchema({
-    resolvers: [RegisterResolver, LoginResolver, MeResolver],
+    resolvers: [RegisterResolver, LoginResolver, MeResolver, ConfirmUserResolver],
     authChecker: customAuthChecker,
   });
 

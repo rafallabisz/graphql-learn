@@ -8,6 +8,6 @@ export class MeResolver {
   async me(@Ctx() ctx: MyContext): Promise<User | undefined> {
     const userId = ctx.req.session!.userId;
     if (!userId) return undefined;
-    return User.findOne(userId);
+    return await User.findOne(userId);
   }
 }
