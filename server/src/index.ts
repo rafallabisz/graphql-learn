@@ -26,7 +26,7 @@ const bootstrap = async () => {
     authChecker: customAuthChecker,
   });
 
-  const apolloServer = new ApolloServer({ schema, context: ({ req }) => ({ req }) });
+  const apolloServer = new ApolloServer({ schema, context: ({ req, res }) => ({ req, res }) });
 
   const app = express();
 
