@@ -23,8 +23,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
-    "rootDir": "src"
+    "baseUrl": "src",
+    "rootDir": "src",
+    "resolveJsonModule": true,
+    "paths": {
+      "src/*": ["./src/*"]
+    }
   },
   "exclude": ["node_modules"],
   "include": ["./src/**/*.tsx", "./src/**/*.ts", "src/config/ormconfig.ts"]
