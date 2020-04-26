@@ -4,15 +4,15 @@ import { RegisterInput } from './register/RegisterInput';
 import { Product } from '../../entity/Product';
 import { Middleware } from 'type-graphql/dist/interfaces/Middleware';
 
-function createResolver<T extends ClassType, X>(
+function createResolver<T extends ClassType, K extends ClassType>(
   suffix: string,
   returnType: T,
-  inputType: X,
+  inputType: K,
   entity: any,
   middleware?: Middleware<any>[],
 ) {
-  @Resolver()
-  class BaseResolver {
+  @Resolver({ isAbstract: true })
+  abstract class BaseResolver {
     @Mutation(() => returnType, { name: `create${suffix}` })
     @UseMiddleware(...(middleware || []))
     async create(@Arg('data', () => inputType) data: any) {
